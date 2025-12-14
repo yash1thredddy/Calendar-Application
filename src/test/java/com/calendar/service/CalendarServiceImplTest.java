@@ -9,20 +9,17 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalendarServiceImplTest {
 
-    private EventStorage storage;
-    private SlotFinder slotFinder;
     private CalendarServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        storage = new InMemoryEventStorage();
-        slotFinder = new StandardSlotFinder(storage);
+        EventStorage storage = new InMemoryEventStorage();
+        SlotFinder slotFinder = new StandardSlotFinder(storage);
         service = new CalendarServiceImpl(storage, slotFinder);
     }
 

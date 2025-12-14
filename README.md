@@ -15,25 +15,19 @@ This application helps you manage your daily schedule by:
 
 ### Requirements
 - Java 11 or higher
-- Maven (optional, but recommended)
+- Maven (optional)
 
 ### Running the Application
 
-**Using Maven:**
-```bash
-mvn clean compile
-mvn exec:java -Dexec.mainClass="com.calendar.CalendarApp"
-```
-
-**Using your IDE (IntelliJ/Eclipse):**
-1. Open the project
+**Using IntelliJ/Eclipse (Recommended):**
+1. Open the project in your IDE
 2. Find `src/main/java/com/calendar/CalendarApp.java`
 3. Right-click → Run
 
-**Using compiled JAR:**
+**Using Maven (Optional):**
 ```bash
-mvn clean package
-java -jar target/calendar-app-1.0.0-jar-with-dependencies.jar
+mvn clean compile
+mvn exec:java -Dexec.mainClass="com.calendar.CalendarApp"
 ```
 
 ## How to Use
@@ -137,47 +131,6 @@ src/
 
 ## Running Tests
 
-### Using Maven
-
-```bash
-# Run all tests
-mvn test
-
-# Run tests with detailed output
-mvn test -X
-
-# Run specific test class
-mvn test -Dtest=EventTest
-
-# Run tests and generate coverage report
-mvn test jacoco:report
-```
-
-**Expected output:**
-```
-[INFO] -------------------------------------------------------
-[INFO]  T E S T S
-[INFO] -------------------------------------------------------
-[INFO] Running com.calendar.model.EventTest
-[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Running com.calendar.model.TimeSlotTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Running com.calendar.service.InMemoryEventStorageTest
-[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Running com.calendar.service.StandardSlotFinderTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Running com.calendar.service.CalendarServiceImplTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Running com.calendar.factory.ServiceFactoryTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
-[INFO]
-[INFO] Results:
-[INFO]
-[INFO] Tests run: 41, Failures: 0, Errors: 0, Skipped: 0
-[INFO]
-[INFO] BUILD SUCCESS
-```
-
 ### Using IntelliJ IDEA
 
 1. Right-click on `src/test/java` folder
@@ -185,12 +138,30 @@ mvn test jacoco:report
 3. View results in the Run panel (bottom of screen)
 4. All tests should show green checkmarks
 
+**Expected:** All 41 tests pass with 0 failures
+
 ### Using Eclipse
 
 1. Right-click on `src/test/java` folder
 2. Select **Run As → JUnit Test**
 3. View results in JUnit panel
 4. All tests should pass
+
+### Using Maven (Optional)
+
+```bash
+# Run all tests
+mvn test
+
+# Run specific test class
+mvn test -Dtest=EventTest
+```
+
+**Expected output:**
+```
+[INFO] Tests run: 41, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
 
 ### What the Tests Verify
 

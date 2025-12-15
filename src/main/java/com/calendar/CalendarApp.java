@@ -20,8 +20,8 @@ public class CalendarApp {
     private final CalendarServiceImpl calendarService;
     private final Scanner scanner;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public CalendarApp() {
@@ -124,8 +124,22 @@ public class CalendarApp {
             return;
         }
 
-        LocalDateTime startTime = promptForDateTime("Start Time (yyyy-MM-dd HH:mm): ");
-        LocalDateTime endTime = promptForDateTime("End Time   (yyyy-MM-dd HH:mm): ");
+        LocalDateTime startTime = promptForDateTime("Start Time (MM-dd-yyyy HH:mm): ");
+        LocalDateTime endTime = promptForDateTime("End Time   (MM-dd-yyyy HH:mm): ");
+
+        // Check if event is in the past
+        if (startTime.isBefore(LocalDateTime.now())) {
+            System.out.println("\nWarning: This event is in the past!");
+            System.out.print("Do you want to enter a new future time? (y/n): ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            if (choice.equals("y")) {
+                System.out.println("\nPlease enter future times:");
+                startTime = promptForDateTime("Start Time (MM-dd-yyyy HH:mm): ");
+                endTime = promptForDateTime("End Time   (MM-dd-yyyy HH:mm): ");
+            }
+            // If 'n' or anything else, keep the past time
+        }
 
         Event event = Event.create(title, startTime, endTime);
         calendarService.addEvent(event);
@@ -318,7 +332,7 @@ public class CalendarApp {
                 duration = 120;
                 break;
             case "4":
-                duration = promptForDuration("Enter duration in minutes: ");
+                duration = promptForDuration();
                 break;
             default:
                 System.out.println("Invalid choice. Using 60 minutes.");
@@ -418,7 +432,7 @@ public class CalendarApp {
 
     private void listEventsForSpecificDay() {
         System.out.println("\n--- List Events for Specific Day ---");
-        LocalDate date = promptForDate("Enter date (yyyy-MM-dd): ");
+        LocalDate date = promptForDate();
         LocalDateTime dateTime = date.atStartOfDay();
 
         System.out.println("\nEvents for " + date.format(DATE_FORMATTER) + ":");
@@ -453,7 +467,7 @@ public class CalendarApp {
                 duration = 120;
                 break;
             case "4":
-                duration = promptForDuration("Enter duration in minutes: ");
+                duration = promptForDuration();
                 break;
             default:
                 System.out.println("Invalid choice. Using 60 minutes.");
@@ -470,7 +484,7 @@ public class CalendarApp {
             availableSlots = calendarService.findAllAvailableSlots(duration);
             searchDate = LocalDate.now();
         } else {
-            searchDate = promptForDate("Enter date (yyyy-MM-dd): ");
+            searchDate = promptForDate();
             availableSlots = calendarService.findAllAvailableSlots(duration, searchDate.atStartOfDay());
         }
 
@@ -630,15 +644,15 @@ public class CalendarApp {
             try {
                 return LocalDateTime.parse(input, DATETIME_FORMATTER);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid format! Please use: yyyy-MM-dd HH:mm (e.g., 2025-12-15 14:30)");
+                System.out.println("Invalid format! Please use: MM-dd-yyyy HH:mm (e.g., 12-15-2025 14:30)");
                 System.out.println("Or type 'cancel' to go back.\n");
             }
         }
     }
 
-    private LocalDate promptForDate(String prompt) {
+    private LocalDate promptForDate() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Enter date (MM-dd-yyyy): ");
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("cancel")) {
@@ -648,15 +662,15 @@ public class CalendarApp {
             try {
                 return LocalDate.parse(input, DATE_FORMATTER);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid format! Please use: yyyy-MM-dd (e.g., 2025-12-15)");
+                System.out.println("Invalid format! Please use: MM-dd-yyyy (e.g., 12-15-2025)");
                 System.out.println("Or type 'cancel' to go back.\n");
             }
         }
     }
 
-    private int promptForDuration(String prompt) {
+    private int promptForDuration() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Enter duration in minutes: ");
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("cancel")) {

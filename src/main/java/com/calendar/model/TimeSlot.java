@@ -8,7 +8,7 @@ public class TimeSlot {
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
     public TimeSlot(LocalDateTime startTime, LocalDateTime endTime) {
         if (startTime == null || endTime == null) {

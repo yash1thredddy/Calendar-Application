@@ -14,7 +14,7 @@ public class Event implements Comparable<Event> {
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
     // Constructor with all fields
     public Event(String id, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {

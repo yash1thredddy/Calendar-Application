@@ -10,21 +10,73 @@ This application helps you manage your daily schedule by:
 - Viewing your schedule for today or any specific day
 - Finding available time slots for new appointments
 - Booking available slots directly
+- Deleting events you no longer need
+
+## Approach and Design
+
+### Overview
+I built this as an in-memory event management system using Java. The main challenge was implementing overlap detection and smart time slot finding while keeping the interface simple.
+
+### Design Decisions
+
+**Interface-Based Architecture**
+
+I separated storage and slot-finding into interfaces (EventStorage, SlotFinder) so I can swap implementations later. For example, could add file storage or database storage without changing the main service code.
+
+```
+CalendarApp (UI)
+     ↓
+CalendarServiceImpl (Logic)
+     ↓              ↓
+EventStorage    SlotFinder
+     ↓              ↓
+InMemoryStorage  StandardSlotFinder
+```
+
+**Overlap Detection Algorithm**
+
+Events overlap if: `eventA.start < eventB.end && eventB.start < eventA.end`
+
+This simple formula checks all possible overlap scenarios without complex if-statements.
+
+**Slot Finding Approach**
+
+Instead of just showing the first available slot, I show ALL available slots in 30-minute increments. The algorithm:
+1. Checks gaps before the first event
+2. Checks gaps between consecutive events
+3. Checks gaps after the last event
+4. Returns all slots that fit the requested duration
+
+**Component Separation**
+- Event: Data model with validation
+- EventStorage: Handles save/load/delete
+- CalendarServiceImpl: Business logic and overlap checking
+- SlotFinder: Scheduling algorithm (9 AM - 6 PM working hours)
+- ServiceFactory: Wires everything together
 
 ## Getting Started
 
 ### Requirements
 - Java 11 or higher
-- Maven (optional)
 
 ### Running the Application
 
-**Using IntelliJ/Eclipse (Recommended):**
+**Option 1: Command Line (No Build Tools Required)**
+
+```bash
+# Compile
+javac -d out -sourcepath src/main/java src/main/java/com/calendar/CalendarApp.java
+
+# Run
+java -cp out com.calendar.CalendarApp
+```
+
+**Option 2: Using IntelliJ/Eclipse**
 1. Open the project in your IDE
 2. Find `src/main/java/com/calendar/CalendarApp.java`
 3. Right-click → Run
 
-**Using Maven (Optional):**
+**Option 3: Using Maven (Optional)**
 ```bash
 mvn clean compile
 mvn exec:java -Dexec.mainClass="com.calendar.CalendarApp"
@@ -44,23 +96,6 @@ When you run the app, you'll see a menu with these options:
 7. Delete Event
 8. Exit
 ```
-
-### Creating Your First Event
-
-1. Select option **1** (Create New Event)
-2. Enter event title: `Team Meeting`
-3. Enter start time: `2025-12-15 10:00`
-4. Enter end time: `2025-12-15 11:00`
-
-Done! The event is created and you'll see a summary.
-
-### Finding Available Time
-
-1. Select option **5** (Find Next Available Slot)
-2. Choose duration (30 min, 1 hour, 2 hours, or custom)
-3. Choose today or specific date
-
-The app will show you all available time slots. You can then book one directly by entering its number.
 
 ### Example Session
 
@@ -86,6 +121,75 @@ Quick Actions:
   3. Find available slots
   4. Back to main menu
 ```
+
+## Error Handling
+
+The app handles invalid input gracefully:
+
+**Wrong Date Format:**
+```
+Start Time (yyyy-MM-dd HH:mm): 15-12-2025 10:00
+Invalid format! Please use: yyyy-MM-dd HH:mm (e.g., 2025-12-15 14:30)
+Or type 'cancel' to go back.
+
+Start Time (yyyy-MM-dd HH:mm): 2025-12-15 10:00
+```
+
+**Overlapping Event:**
+```
+Event overlaps with existing event(s). Cannot add overlapping events.
+Please choose a different time for your event.
+```
+
+**Empty Title:**
+```
+Event Title:
+Title cannot be empty!
+```
+
+**Invalid Event Data:**
+```
+End time must be after start time
+```
+
+All errors are handled without crashing - you either get a retry prompt or return to the main menu.
+
+## Test Data / Seed Data
+
+The application starts with an **empty calendar**. When you first run it:
+
+```
+==================================================
+              CALENDAR APPLICATION
+==================================================
+Total Events: 0
+==================================================
+```
+
+**Suggested Test Flow:**
+
+1. Create a few events for today:
+   ```
+   Morning Standup: 09:30 - 10:00
+   Team Meeting: 10:00 - 11:00
+   Lunch Break: 12:00 - 13:00
+   ```
+
+2. Try to create an overlapping event:
+   ```
+   Client Call: 10:30 - 11:30  (will fail - overlaps with Team Meeting)
+   ```
+
+3. Find available slots:
+   ```
+   Will show: 08:00-09:00, 11:00-12:00, 13:00-14:00, etc.
+   ```
+
+4. Book a slot directly from the search results
+
+5. View your schedule and delete an event
+
+Since events are stored in memory, they're lost when you exit the app.
 
 ## Project Structure
 
@@ -218,26 +322,6 @@ Expected: Only shows 14:00-15:00
 - **Testing**: JUnit 5
 - **Data Storage**: In-memory (no database required)
 - **Working Hours**: 9 AM to 6 PM (configurable)
-
-## Error Handling
-
-The app handles common issues gracefully:
-
-**Wrong date format?** It'll ask again with an example:
-```
-Invalid format! Please use: yyyy-MM-dd HH:mm (e.g., 2025-12-15 14:30)
-Or type 'cancel' to go back.
-```
-
-**Overlapping event?** Clear error message:
-```
-Event overlaps with existing event(s). Cannot add overlapping events.
-```
-
-**Empty title?** Returns to menu gracefully:
-```
-Title cannot be empty!
-```
 
 ## Notes
 

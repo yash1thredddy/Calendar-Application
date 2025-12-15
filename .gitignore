@@ -1,5 +1,6 @@
 # Compiled class files
 *.class
+out/
 
 # Log files
 *.log
@@ -62,3 +63,4 @@ dist/
 
 # Internal tracking files (not for submission)
 REQUIREMENTS_CHECKLIST.md
+PPT.md

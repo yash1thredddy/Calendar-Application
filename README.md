@@ -146,14 +146,14 @@ Enter your choice (1-8): 1
 
 --- Create New Event ---
 Event Title: Morning Standup
-Start Time (yyyy-MM-dd HH:mm): 2025-12-15 09:30
-End Time   (yyyy-MM-dd HH:mm): 2025-12-15 10:00
+Start Time (MM-dd-yyyy HH:mm): 12-15-2025 09:30
+End Time   (MM-dd-yyyy HH:mm): 12-15-2025 10:00
 
 Event created successfully!
 
 Event Details:
   Title:    Morning Standup
-  Date:     2025-12-15
+  Date:     12-15-2025
   Time:     09:30 - 10:00
   Duration: 30 minutes
 
@@ -170,11 +170,11 @@ The app handles invalid input gracefully:
 
 **Wrong Date Format:**
 ```
-Start Time (yyyy-MM-dd HH:mm): 15-12-2025 10:00
-Invalid format! Please use: yyyy-MM-dd HH:mm (e.g., 2025-12-15 14:30)
+Start Time (MM-dd-yyyy HH:mm): 2025-12-15 10:00
+Invalid format! Please use: MM-dd-yyyy HH:mm (e.g., 12-15-2025 14:30)
 Or type 'cancel' to go back.
 
-Start Time (yyyy-MM-dd HH:mm): 2025-12-15 10:00
+Start Time (MM-dd-yyyy HH:mm): 12-15-2025 10:00
 ```
 
 **Overlapping Event:**

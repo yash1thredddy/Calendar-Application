@@ -6,39 +6,32 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 
-// Represents a calendar event with title, time, and optional description
+// Represents a calendar event with title and time
 public class Event implements Comparable<Event> {
     private final String id;
     private final String title;
-    private final String description;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
     // Constructor with all fields
-    public Event(String id, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public Event(String id, String title, LocalDateTime startTime, LocalDateTime endTime) {
         validateEvent(id, title, startTime, endTime);
         this.id = id;
         this.title = title;
-        this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     // Constructor with auto-generated ID
     public Event(String title, LocalDateTime startTime, LocalDateTime endTime) {
-        this(UUID.randomUUID().toString(), title, null, startTime, endTime);
+        this(UUID.randomUUID().toString(), title, startTime, endTime);
     }
 
-    // Create a new event
+    // Create a new event (Static Factory Method)
     public static Event create(String title, LocalDateTime startTime, LocalDateTime endTime) {
         return new Event(title, startTime, endTime);
-    }
-
-    // Create a new event with description
-    public static Event create(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
-        return new Event(UUID.randomUUID().toString(), title, description, startTime, endTime);
     }
 
     private void validateEvent(String id, String title, LocalDateTime startTime, LocalDateTime endTime) {
@@ -82,10 +75,6 @@ public class Event implements Comparable<Event> {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -124,14 +113,9 @@ public class Event implements Comparable<Event> {
 
     @Override
     public String toString() {
-        String base = String.format("[%s - %s] %s",
+        return String.format("[%s - %s] %s",
             startTime.format(FORMATTER),
             endTime.format(FORMATTER),
             title);
-
-        if (description != null && !description.trim().isEmpty()) {
-            return base + " - " + description;
-        }
-        return base;
     }
 }

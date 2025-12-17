@@ -21,16 +21,6 @@ class EventTest {
     }
 
     @Test
-    void testEventCreation_WithDescription() {
-        LocalDateTime start = LocalDateTime.of(2025, 12, 15, 10, 0);
-        LocalDateTime end = LocalDateTime.of(2025, 12, 15, 11, 0);
-        Event event = Event.create("Meeting", "Project discussion", start, end);
-
-        assertEquals("Meeting", event.getTitle());
-        assertEquals("Project discussion", event.getDescription());
-    }
-
-    @Test
     void testEventCreation_EmptyTitle() {
         LocalDateTime start = LocalDateTime.of(2025, 12, 15, 10, 0);
         LocalDateTime end = LocalDateTime.of(2025, 12, 15, 11, 0);
@@ -136,11 +126,11 @@ class EventTest {
 
     @Test
     void testEquals_SameId() {
-        Event event1 = new Event("id1", "Meeting", null,
+        Event event1 = new Event("id1", "Meeting",
             LocalDateTime.of(2025, 12, 15, 10, 0),
             LocalDateTime.of(2025, 12, 15, 11, 0));
 
-        Event event2 = new Event("id1", "Different Title", null,
+        Event event2 = new Event("id1", "Different Title",
             LocalDateTime.of(2025, 12, 15, 14, 0),
             LocalDateTime.of(2025, 12, 15, 15, 0));
 
@@ -157,5 +147,18 @@ class EventTest {
         assertTrue(str.contains("Team Meeting"));
         assertTrue(str.contains("10:30"));
         assertTrue(str.contains("11:30"));
+    }
+
+    @Test
+    void testEquals_DifferentId() {
+        Event event1 = new Event("id1", "Meeting",
+            LocalDateTime.of(2025, 12, 15, 10, 0),
+            LocalDateTime.of(2025, 12, 15, 11, 0));
+
+        Event event2 = new Event("id2", "Meeting",
+            LocalDateTime.of(2025, 12, 15, 10, 0),
+            LocalDateTime.of(2025, 12, 15, 11, 0));
+
+        assertNotEquals(event1, event2);
     }
 }

@@ -295,41 +295,64 @@ public class CalendarApp {
             return;
         }
 
-        System.out.print("Start Time (HH:mm): ");
-        String startTimeStr = scanner.nextLine().trim();
-        LocalDateTime startTime = date.atTime(parseTime(startTimeStr));
+        boolean eventCreated = false;
+        while (!eventCreated) {
+            System.out.print("Start Time (HH:mm): ");
+            String startTimeStr = scanner.nextLine().trim();
 
-        System.out.print("End Time (HH:mm): ");
-        String endTimeStr = scanner.nextLine().trim();
-        LocalDateTime endTime = date.atTime(parseTime(endTimeStr));
+            if (startTimeStr.equalsIgnoreCase("cancel")) {
+                System.out.println("Event creation cancelled.");
+                return;
+            }
 
-        // Check if event is in the past and re-validate until valid future time or user cancels
-        while (startTime.isBefore(LocalDateTime.now())) {
-            System.out.println("\nWarning: This event is in the past!");
-            System.out.print("Do you want to enter a new future time? (y/n): ");
-            String choice = scanner.nextLine().trim().toLowerCase();
+            LocalDateTime startTime = date.atTime(parseTime(startTimeStr));
 
-            if (choice.equals("y")) {
-                System.out.println("\nPlease enter future times:");
-                System.out.print("Start Time (HH:mm): ");
-                startTimeStr = scanner.nextLine().trim();
-                startTime = date.atTime(parseTime(startTimeStr));
+            System.out.print("End Time (HH:mm): ");
+            String endTimeStr = scanner.nextLine().trim();
 
-                System.out.print("End Time (HH:mm): ");
-                endTimeStr = scanner.nextLine().trim();
-                endTime = date.atTime(parseTime(endTimeStr));
-                // Loop continues to re-validate the new times
-            } else {
-                // User chose 'n' or anything else - keep the past time
-                break;
+            if (endTimeStr.equalsIgnoreCase("cancel")) {
+                System.out.println("Event creation cancelled.");
+                return;
+            }
+
+            LocalDateTime endTime = date.atTime(parseTime(endTimeStr));
+
+            // Check if event is in the past
+            if (startTime.isBefore(LocalDateTime.now())) {
+                System.out.println("\nWarning: This event is in the past!");
+                System.out.print("Do you want to enter a new future time? (y/n): ");
+                String choice = scanner.nextLine().trim().toLowerCase();
+
+                if (!choice.equals("y")) {
+                    System.out.println("Event creation cancelled.");
+                    return;
+                }
+                continue; // Ask for times again
+            }
+
+            // Try to create and add the event
+            try {
+                Event event = Event.create(title, startTime, endTime);
+                calendarService.addEvent(event);
+
+                System.out.println("\nEvent created successfully!");
+                printEventDetails(event);
+                eventCreated = true;
+
+            } catch (EventOverlapException e) {
+                System.out.println("\n" + e.getMessage());
+                System.out.println("Please choose a different time for your event.");
+                System.out.print("Do you want to try again with a different time? (y/n): ");
+                String retry = scanner.nextLine().trim().toLowerCase();
+
+                if (!retry.equals("y")) {
+                    System.out.println("Event creation cancelled.");
+                    return;
+                }
+                // Loop continues to ask for new times
             }
         }
 
-        Event event = Event.create(title, startTime, endTime);
-        calendarService.addEvent(event);
-
-        System.out.println("\nEvent created successfully!");
-        printEventDetails(event);
         showQuickActions();
     }
 
@@ -402,7 +425,7 @@ public class CalendarApp {
         try {
             return java.time.LocalTime.parse(timeStr, TIME_FORMATTER);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid time format. Use HH:mm (e.g., 14:30)");
+             throw new IllegalArgumentException("Invalid time format. Use HH:mm (e.g., 14:30). Got: '" + timeStr + "' - " + e.getMessage());
         }
     }
 

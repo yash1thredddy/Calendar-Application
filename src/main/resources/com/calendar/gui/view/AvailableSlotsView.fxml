@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.calendar.gui.controller.AvailableSlotsController">
+
+    <!-- Top: Search Controls -->
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f8f8f8;">
+            <Label text="Find Available Time Slots" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="5">
+                    <Label text="Duration:"/>
+                    <ComboBox fx:id="durationComboBox" promptText="Select duration" prefWidth="150"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Custom Duration (minutes):"/>
+                    <TextField fx:id="customDurationField" promptText="e.g., 90" prefWidth="150" disable="true"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Date:"/>
+                    <DatePicker fx:id="datePicker" promptText="Select date" prefWidth="150"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text=" "/>
+                    <Button text="Find Slots" onAction="#handleFindSlots" prefWidth="100"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: ListView of available slots -->
+    <center>
+        <ListView fx:id="slotsListView">
+            <placeholder>
+                <Label text="No slots found. Click 'Find Slots' to search."/>
+            </placeholder>
+        </ListView>
+    </center>
+
+    <!-- Bottom: Actions -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Label fx:id="statusLabel" text="Ready"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="bookSlotButton" text="Book Selected Slot" onAction="#handleBookSlot" disable="true"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

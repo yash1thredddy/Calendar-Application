@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.calendar.gui.controller.CalendarViewController"
+      spacing="10">
+
+    <!-- Navigation Header -->
+    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 10; -fx-background-color: #f8f8f8;">
+        <Button text="&lt; Previous" onAction="#handlePreviousMonth"/>
+        <Label fx:id="monthYearLabel" text="December 2025" style="-fx-font-size: 18px; -fx-font-weight: bold;" minWidth="200" alignment="CENTER"/>
+        <Button text="Next &gt;" onAction="#handleNextMonth"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Today" onAction="#handleToday"/>
+    </HBox>
+
+    <!-- Calendar Grid -->
+    <GridPane fx:id="calendarGrid" hgap="1" vgap="1" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="5" right="10" bottom="10" left="10"/>
+        </padding>
+        <!-- Grid will be populated programmatically -->
+    </GridPane>
+
+</VBox>

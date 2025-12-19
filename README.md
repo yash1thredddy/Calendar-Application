@@ -1,6 +1,14 @@
 # Calendar Management System
 
-A simple command-line application for managing calendar events and appointments. Built in Java.
+A calendar management application with both command-line (CLI) and graphical (GUI) interfaces for managing events and appointments. Built in Java with JavaFX.
+
+## GUI Version Available!
+
+This project now includes a full-featured **JavaFX graphical interface**. For detailed GUI documentation, screenshots, and usage guide, see:
+
+**[GUI User Guide (README_GUI.md)](src/main/java/com/calendar/gui/README_GUI.md)**
+
+The documentation below focuses on the CLI version. Both CLI and GUI share the same core business logic.
 
 ## What It Does
 
@@ -34,23 +42,41 @@ This application helps you manage your daily schedule by:
 
 ```
 src/
-├── main/java/com/calendar/
-│   ├── CalendarApp.java              # Main application
-│   ├── model/                         # Data models
-│   │   ├── Event.java
-│   │   └── TimeSlot.java
-│   ├── service/                       # Core logic
-│   │   ├── CalendarServiceImpl.java
-│   │   ├── EventStorage.java
-│   │   ├── InMemoryEventStorage.java
-│   │   ├── SlotFinder.java
-│   │   └── StandardSlotFinder.java
-│   ├── factory/
-│   │   └── ServiceFactory.java
-│   └── exception/                     # Custom exceptions
-│       ├── EventOverlapException.java
-│       └── InvalidEventException.java
-└── test/java/com/calendar/           # Test files
+├── main/
+│   ├── java/com/calendar/
+│   │   ├── CalendarApp.java              # CLI entry point
+│   │   ├── model/                         # Data models (shared)
+│   │   │   ├── Event.java
+│   │   │   └── TimeSlot.java
+│   │   ├── service/                       # Core logic (shared)
+│   │   │   ├── CalendarServiceImpl.java
+│   │   │   ├── EventStorage.java
+│   │   │   ├── InMemoryEventStorage.java
+│   │   │   ├── SlotFinder.java
+│   │   │   └── StandardSlotFinder.java
+│   │   ├── factory/                       # Dependency injection
+│   │   │   └── ServiceFactory.java
+│   │   ├── exception/                     # Custom exceptions
+│   │   │   ├── EventOverlapException.java
+│   │   │   └── InvalidEventException.java
+│   │   └── gui/                           # GUI components
+│   │       ├── CalendarGuiApp.java        # GUI entry point
+│   │       ├── controller/                # FXML controllers
+│   │       │   ├── MainWindowController.java
+│   │       │   ├── CalendarViewController.java
+│   │       │   ├── EventListController.java
+│   │       │   └── AvailableSlotsController.java
+│   │       └── util/
+│   │           └── AlertUtil.java         # Alert dialogs
+│   └── resources/com/calendar/gui/
+│       ├── view/                          # FXML view definitions
+│       │   ├── MainWindow.fxml
+│       │   ├── CalendarView.fxml
+│       │   ├── EventListView.fxml
+│       │   └── AvailableSlotsView.fxml
+│       └── css/                           # Stylesheets
+│           └── calendar.css
+└── test/java/com/calendar/               # Test files (41 tests)
 ```
 
 ## Approach and Design
@@ -331,15 +357,22 @@ Expected: Only shows 14:00-15:00
 
 ## Future Ideas
 
-If I had more time, I'd add:
-- Build UI
-- Integrate it with Calenders (Google Calender or Outlook etc)
-- Save/load events from file
-- Edit existing events
-- Recurring events (daily, weekly)
-- Search events by title
-- Color coding for event types
+**Completed:**
+- Build UI (JavaFX GUI now available - see [README_GUI.md](src/main/java/com/calendar/gui/README_GUI.md))
+
+**Planned Enhancements:**
+- Integrate with external calendars (Google Calendar, Outlook, etc.)
+- Persistent storage (save/load events from file or database)
+- Edit existing events (currently must delete and recreate)
+- Recurring events (daily, weekly, monthly)
+- Advanced search and filtering
+- Event categories with color coding
+- Reminder notifications
+- Import/export to iCal format
 
 ## Built With
 
-Java, Maven, JUnit.
+- **Java 11+** - Core programming language
+- **JavaFX** - GUI framework
+- **Maven** - Build and dependency management
+- **JUnit 5** - Testing framework

@@ -1,0 +1,78 @@
+/* Calendar Application Stylesheet */
+
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #1976D2;
+}
+
+.create-button {
+    -fx-background-color: #4CAF50;
+    -fx-font-weight: bold;
+}
+
+.create-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.delete-button {
+    -fx-background-color: #f44336;
+}
+
+.delete-button:hover {
+    -fx-background-color: #d32f2f;
+}
+
+/* Table View */
+.table-view {
+    -fx-background-color: white;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Calendar Grid Cells */
+.calendar-cell {
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+    -fx-background-color: white;
+}
+
+.calendar-cell.current-day {
+    -fx-background-color: #e3f2fd;
+}
+
+.calendar-cell.past-date {
+    -fx-opacity: 0.5;
+}
+
+.calendar-cell.other-month {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Tab Pane */
+.tab-pane {
+    -fx-tab-min-width: 150px;
+}
+
+.tab {
+    -fx-background-color: #f0f0f0;
+}
+
+.tab:selected {
+    -fx-background-color: #ffffff;
+}

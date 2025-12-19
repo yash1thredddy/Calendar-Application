@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.calendar.gui.controller.EventListController">
+
+    <!-- Top: Filter Controls -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: #f8f8f8;">
+            <Label text="Filter by date:"/>
+            <DatePicker fx:id="datePicker" promptText="Select date"/>
+            <Button text="Clear Filter" onAction="#handleClearFilter"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="eventCountLabel" text="Showing 0 events"/>
+        </HBox>
+    </top>
+
+    <!-- Center: TableView -->
+    <center>
+        <TableView fx:id="eventsTable">
+            <columns>
+                <TableColumn fx:id="titleColumn" text="Title" prefWidth="200"/>
+                <TableColumn fx:id="startDateColumn" text="Date" prefWidth="120"/>
+                <TableColumn fx:id="startTimeColumn" text="Start Time" prefWidth="100"/>
+                <TableColumn fx:id="endTimeColumn" text="End Time" prefWidth="100"/>
+                <TableColumn fx:id="durationColumn" text="Duration" prefWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="No events found"/>
+            </placeholder>
+        </TableView>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Button text="Delete Selected" onAction="#handleDelete" styleClass="delete-button"/>
+            <Button text="Refresh" onAction="#handleRefresh"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -111,12 +111,14 @@ public class CalendarApp {
         System.out.println("8. Exit");
         System.out.println("-".repeat(50));
         System.out.print("Enter your choice (1-8): ");
+        System.out.flush();
     }
 
     private void createEvent() {
         System.out.println("\n--- Create New Event ---");
 
         System.out.print("Event Title: ");
+        System.out.flush();
         String title = scanner.nextLine().trim();
 
         if (title.isEmpty()) {
@@ -124,32 +126,47 @@ public class CalendarApp {
             return;
         }
 
-        LocalDateTime startTime = promptForDateTime("Start Time (MM-dd-yyyy HH:mm): ");
-        LocalDateTime endTime = promptForDateTime("End Time   (MM-dd-yyyy HH:mm): ");
+        boolean eventCreated = false;
+        while (!eventCreated) {
+            LocalDateTime startTime = promptForDateTime("Start Time (MM-dd-yyyy HH:mm): ");
+            LocalDateTime endTime = promptForDateTime("End Time   (MM-dd-yyyy HH:mm): ");
 
-        // Check if event is in the past and re-validate until valid future time or user cancels
-        while (startTime.isBefore(LocalDateTime.now())) {
-            System.out.println("\nWarning: This event is in the past!");
-            System.out.print("Do you want to enter a new future time? (y/n): ");
-            String choice = scanner.nextLine().trim().toLowerCase();
+            // Check if event is in the past
+            if (startTime.isBefore(LocalDateTime.now())) {
+                System.out.println("\nWarning: This event is in the past!");
+                System.out.print("Do you want to enter a new future time? (y/n): ");
+                String choice = scanner.nextLine().trim().toLowerCase();
 
-            if (choice.equals("y")) {
-                System.out.println("\nPlease enter future times:");
-                startTime = promptForDateTime("Start Time (MM-dd-yyyy HH:mm): ");
-                endTime = promptForDateTime("End Time   (MM-dd-yyyy HH:mm): ");
-                // Loop continues to re-validate the new times
-            } else {
-                // User chose 'n' or anything else - keep the past time
-                break;
+                if (!choice.equals("y")) {
+                    System.out.println("Event creation cancelled.");
+                    return;
+                }
+                continue; // Ask for times again
+            }
+
+            // Try to create and add the event
+            try {
+                Event event = Event.create(title, startTime, endTime);
+                calendarService.addEvent(event);
+
+                System.out.println("\nEvent created successfully!");
+                printEventDetails(event);
+                printDaySummary(startTime.toLocalDate());
+                eventCreated = true;
+
+            } catch (EventOverlapException e) {
+                System.out.println("\n" + e.getMessage());
+                System.out.println("Please choose a different time for your event.");
+                System.out.print("Do you want to try again with a different time? (y/n): ");
+                String retry = scanner.nextLine().trim().toLowerCase();
+
+                if (!retry.equals("y")) {
+                    System.out.println("Event creation cancelled.");
+                    return;
+                }
+                // Loop continues to ask for new times
             }
         }
-
-        Event event = Event.create(title, startTime, endTime);
-        calendarService.addEvent(event);
-
-        System.out.println("\nEvent created successfully!");
-        printEventDetails(event);
-        printDaySummary(startTime.toLocalDate());
 
         // Quick actions after creating event
         showQuickActions();
@@ -162,6 +179,7 @@ public class CalendarApp {
         System.out.println("  3. Find available slots");
         System.out.println("  4. Back to main menu");
         System.out.print("Choose (1-4) or press Enter for main menu: ");
+        System.out.flush();
 
         String choice = scanner.nextLine().trim();
 
@@ -195,6 +213,7 @@ public class CalendarApp {
         System.out.println("  3. View events for specific day");
         System.out.println("  4. Back to main menu");
         System.out.print("Choose (1-4) or press Enter for main menu: ");
+        System.out.flush();
 
         String choice = scanner.nextLine().trim();
 
@@ -227,6 +246,7 @@ public class CalendarApp {
         System.out.println("  3. View another day");
         System.out.println("  4. Back to main menu");
         System.out.print("Choose (1-4) or press Enter for main menu: ");
+        System.out.flush();
 
         String choice = scanner.nextLine().trim();
 
@@ -259,6 +279,7 @@ public class CalendarApp {
         System.out.println("  3. View today's events");
         System.out.println("  4. Back to main menu");
         System.out.print("Choose (1-4) or press Enter for main menu: ");
+        System.out.flush();
 
         String choice = scanner.nextLine().trim();
 
@@ -288,6 +309,7 @@ public class CalendarApp {
         System.out.println("\n--- Create Event on " + date.format(DATE_FORMATTER) + " ---");
 
         System.out.print("Event Title: ");
+        System.out.flush();
         String title = scanner.nextLine().trim();
 
         if (title.isEmpty()) {
@@ -683,10 +705,17 @@ public class CalendarApp {
     private LocalDateTime promptForDateTime(String prompt) {
         while (true) {
             System.out.print(prompt);
+            System.out.flush(); // Force the prompt to display immediately
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("cancel")) {
                 throw new IllegalArgumentException("Operation cancelled");
+            }
+
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty! Please enter a date and time.");
+                System.out.println("Format: MM-dd-yyyy HH:mm (e.g., 12-15-2025 14:30)\n");
+                continue;
             }
 
             try {
@@ -701,10 +730,17 @@ public class CalendarApp {
     private LocalDate promptForDate() {
         while (true) {
             System.out.print("Enter date (MM-dd-yyyy): ");
+            System.out.flush();
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("cancel")) {
                 throw new IllegalArgumentException("Operation cancelled");
+            }
+
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty! Please enter a date.");
+                System.out.println("Format: MM-dd-yyyy (e.g., 12-15-2025)\n");
+                continue;
             }
 
             try {
@@ -719,10 +755,17 @@ public class CalendarApp {
     private int promptForDuration() {
         while (true) {
             System.out.print("Enter duration in minutes: ");
+            System.out.flush();
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("cancel")) {
                 throw new IllegalArgumentException("Operation cancelled");
+            }
+
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty! Please enter a duration.");
+                System.out.println("Or type 'cancel' to go back.\n");
+                continue;
             }
 
             try {

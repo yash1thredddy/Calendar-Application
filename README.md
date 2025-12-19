@@ -345,6 +345,7 @@ Expected: Only shows 14:00-15:00
 - **Language**: Java 11+
 - **Build Tool**: Maven
 - **Testing**: JUnit 5
+- **Graphical UI**: JavaFX
 - **Data Storage**: In-memory (no database required)
 - **Working Hours**: 9 AM to 6 PM (configurable)
 
@@ -370,9 +371,4 @@ Expected: Only shows 14:00-15:00
 - Reminder notifications
 - Import/export to iCal format
 
-## Built With
 
-- **Java 11+** - Core programming language
-- **JavaFX** - GUI framework
-- **Maven** - Build and dependency management
-- **JUnit 5** - Testing framework

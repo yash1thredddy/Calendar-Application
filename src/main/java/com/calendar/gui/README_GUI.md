@@ -259,7 +259,7 @@ The application uses consistent formats throughout:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/yash1thredddy/Calendar-Application
 cd Calender
 
 # Build both CLI and GUI JARs
